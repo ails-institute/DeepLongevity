@@ -1,0 +1,10 @@
+
+imageio==2.6.1
+keras-gpu==2.2.0
+keras-preprocessing==1.0.1
+keyring==21.1.0
+pandas==1.0.1
+pillow==7.0.0
+scikit-image==0.16.2
+scikit-learn==0.22.1
+scipy==1.4.1
