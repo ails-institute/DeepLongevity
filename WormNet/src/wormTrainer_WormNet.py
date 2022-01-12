@@ -14,7 +14,7 @@ from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint, ReduceL
 from keras import losses
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
 #from keras.applications.resnet50 import ResNet50, preprocess_input#, preprocess_input
-#from keras.preprocessing import image    
+#from keras.preprocessing import image
 #import resnet
 
 #import resnet_152
@@ -46,7 +46,7 @@ def getClassWeights(y):
     return  {cl: float(majority/count) for cl, count in counter.items()}
 
 
-    
+
 batchSize = 60 #  4
 foldAugment = 30 # 20
 img_size_factor = 1.0 # 0.75
@@ -96,7 +96,7 @@ model = WormNet_200130.getWormNet()
 
 if modelContinueFlag:
    model.load_weights(modelContinueWeigthsFile, by_name=False)
-   
+
 model.summary()
 model.compile(loss='categorical_crossentropy',
               #model.compile(loss='categorical_hinge',
@@ -118,8 +118,8 @@ print("start tesorboard, cmd: tensorboard --logdir=\""+os.path.join(modelDir,"{}
 train_datagen = ImageDataGenerator(
     samplewise_std_normalization=True,
     #rescale=1. / 255,
-    #width_shift_range=0.1,
-    #height_shift_range=0.1,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
     rotation_range=90,
     vertical_flip=True,
     fill_mode='nearest',
@@ -135,7 +135,7 @@ test_datagen = ImageDataGenerator(
 
 trainGenerator = train_datagen.flow_from_directory(
     trainFolder,
-    color_mode='grayscale',    
+    color_mode='grayscale',
     shuffle=True,
     seed=123,
     target_size=(int(img_width*img_size_factor), int(img_height*img_size_factor)),
@@ -156,7 +156,7 @@ validationGenerator = validate_datagen.flow_from_directory(
 testGenerator = test_datagen.flow_from_directory(
     testFolder,
     color_mode='grayscale',
-    shuffle=True,    
+    shuffle=True,
     seed=123,
     target_size=(int(img_width*img_size_factor), int(img_height*img_size_factor)),
     batch_size=batchSize,
@@ -167,13 +167,13 @@ callbacksList = [tensorboard]
 
 if earlyStopFlag:
     callbacksList.append(earlyStop)
-if reduceLRFlag:    
+if reduceLRFlag:
     callbacksList.append(reduce_lr)
 if modelCheckpointFlag:
     callbacksList.append(modelCheckpoint)
 
 
-    
+
 history = model.fit_generator(
                 trainGenerator,
                 steps_per_epoch=trainSamplesNumber // batchSize * foldAugment,
